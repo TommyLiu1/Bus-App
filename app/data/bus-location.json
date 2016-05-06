@@ -1,0 +1,9 @@
+
+[
+     { "id": 1, "city" : "ZH", "route": 8, "plate": "plate1", "localtion": { "lat": 12, "long": 18 }}, 
+     { "id": 2, "city" : "ZH", "route": 8, "plate": "plate1", "localtion": { "lat": 12, "long": 18 }}, 
+     { "id": 3, "city" : "ZH", "route": 8, "plate": "plate1", "localtion": { "lat": 12, "long": 18 }}, 
+     { "id": 4, "city" : "SZ", "route": 8, "plate": "plate1", "localtion": { "lat": 12, "long": 18 }}, 
+     { "id": 5, "city" : "SZ", "route": 8, "plate": "plate1", "localtion": { "lat": 12, "long": 18 }}, 
+     { "id": 6, "city" : "SZ", "route": 8, "plate": "plate1", "localtion": { "lat": 12, "long": 18 }}
+]
