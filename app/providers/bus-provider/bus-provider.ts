@@ -3,6 +3,7 @@ import {Http, RequestOptionsArgs, Headers} from 'angular2/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/Rx'; //import all the Observable operators, such as map
 import {BPosition} from './bus';
+import {AppSetting} from '../../app-setting';
 
 /*
   Generated class for the BusDataService provider.
@@ -14,7 +15,7 @@ import {BPosition} from './bus';
 export class BusProvider {
   data: any = null;
 
-  constructor(public http: Http) { }
+  constructor(public http: Http, public appSetting: AppSetting) { }
 
   private handleError(error: any) {
     // In a real world app, we might send the error to remote logging infrastructure
@@ -48,10 +49,12 @@ export class BusProvider {
   setBusPositionToWeb(bPosition: BPosition) {
     console.log('in setBusLocation ' + JSON.stringify(bPosition));
     var postOptions: RequestOptionsArgs = {
-      headers: new Headers({'Content-Type': 'application/json'})
+      headers: new Headers({ 'Content-Type': 'application/json' })
     };
 
-    this.http.post('http://localhost:3000/api/bus/location', JSON.stringify(bPosition), postOptions)
+    console.log('setBusPositionToWeb' + this.appSetting.webApiServer);
+   
+    this.http.post(this.appSetting.webApiServer + '/api/bus/location', JSON.stringify(bPosition), postOptions)
       .map(res => res.json())
       .catch(this.handleError)
       .subscribe(data => {
@@ -62,6 +65,27 @@ export class BusProvider {
       },
       error => {
         console.log('error in getting busLocation' + error);
+      });
+  }
+
+  uploadBusRoute(bRoute: string) {
+    console.log('in uploadBusRoute ' + bRoute);
+    var postOptions: RequestOptionsArgs = {
+      headers: new Headers({'Content-Type': 'application/json'})
+    };
+
+    console.log('uploadBusRoute' + this.appSetting.webApiServer);
+    this.http.post(this.appSetting.webApiServer + '/api/bus/routes', bRoute, postOptions)
+      .map(res => res.json())
+      .catch(this.handleError)
+      .subscribe(data => {
+        // we've got back the raw data, now generate the core schedule data
+        // and save the data for later reference
+        this.data = data;
+        console.log('uploadBusRoute: success callback!!!!!!!' + JSON.stringify(data));
+      },
+      error => {
+        console.log('uploadBusRoute: error in http post' + JSON.stringify(error));
       });
   }
 }

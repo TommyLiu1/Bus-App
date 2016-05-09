@@ -15,6 +15,7 @@ gulp.task('emulate:before', ['build']);
 gulp.task('deploy:before', ['build']);
 gulp.task('build:before', ['build']);
 
+// ionic run will call the gulp task hook run:before
 // we want to 'watch' when livereloading
 var shouldWatch = argv.indexOf('-l') > -1 || argv.indexOf('--livereload') > -1;
 gulp.task('run:before', [shouldWatch ? 'watch' : 'build']);
@@ -68,7 +69,30 @@ gulp.task('scripts', copyScripts);
 gulp.task('clean', function(){
   return del('www/build');
 });
+
+// cju added json task to copy json files
 gulp.task('json', function() {
   gulp.src('app/**/*.json')
     .pipe(gulp.dest('www/build'));
 })
+
+// cju added preprocess tasks
+// run 'gulp dev' before 'ionic run' to set the dev environment
+var preprocess = require('gulp-preprocess');
+gulp.task('dev', function() {
+  gulp.src('app/templates/app-setting.ts')
+    .pipe(preprocess({context: { APP_ENV: 'DEVELOPMENT', DEBUG: true}}))
+    .pipe(gulp.dest('app/'));
+});
+
+gulp.task('test_env', function() {
+  gulp.src('app/templates/app-setting.ts')
+    .pipe(preprocess({context: { APP_ENV: 'TEST', DEBUG: true}}))
+    .pipe(gulp.dest('app/'));
+});
+
+gulp.task('prod', function() {
+  gulp.src('app/templates/app-setting.ts')
+    .pipe(preprocess({context: { APP_ENV: 'PRODUCTION'}}))
+    .pipe(gulp.dest('app/'));
+});

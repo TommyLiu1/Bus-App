@@ -4,8 +4,6 @@ import {BusProvider} from '../../providers/bus-provider/bus-provider';
 import {Input} from 'angular2/core';
 import {logError, overWriteFile, readFile} from '../../util/logUtil';
 
-
-
 declare var window: any;
 declare var LocalFileSystem: any;
 
@@ -77,7 +75,7 @@ export class RecordRoutePage {
 
   stopRecordBusRoute() {
     clearInterval(this.recordBusRouteInterval);
-    console.log('route is:' + JSON.stringify(this.busLineRoute));
+    console.log('stopRecordBusRoute: route is:' + JSON.stringify(this.busLineRoute));
   }
 
   saveBusRoute() {
@@ -87,7 +85,7 @@ export class RecordRoutePage {
       fs.root.getFile("newPersistentFile.txt", { create: true, exclusive: false }, function (fileEntry) {
 
           console.log("fileEntry is file?" + fileEntry.isFile.toString());
-          console.log('bus in saveBusRoute' + JSON.stringify(busRte));
+          console.log('busRte in saveBusRoute' + JSON.stringify(busRte));
           overWriteFile(fileEntry, JSON.stringify(busRte));
       }, function(error) {});
     }, function(error) {});
@@ -105,18 +103,10 @@ export class RecordRoutePage {
   readBusRoute() {
     var that = this;  // that is a reference to this (RecordRoutePage)
     var readFileCb = function(fileContent: string) {  
-      var update = function() {
-        that.busLineRtFromFile = 'xxxxx test from readfile ';
-        console.log('readBusRoute callback 111111: ' + that.busLineRtFromFile);
-      }
-
-      setTimeout(update, 1000);
-
-      //that.busLineRtFromFile = fileContent;
+      that.busLineRtFromFile = fileContent;
+      console.log('readBusRoute callback 111111: ' + that.busLineRtFromFile);
       console.log('readBusRoute callback: ' + that.busLineRtFromFile);
     }
-
-    //readFileCb('file read content from local');
 
     //check https://github.com/apache/cordova-plugin-file for details
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
@@ -127,6 +117,23 @@ export class RecordRoutePage {
         console.log("fileEntry is file?" + fileEntry.isFile.toString());
         // fileEntry.name == 'someFile.txt'
         // fileEntry.fullPath == '/someFile.txt'
+        readFile(fileEntry, readFileCb);
+      }, function(error) { });
+    }, function(error) { });
+  }
+
+  uploadBusRoute() {
+    var that = this;  // that is a reference to this (RecordRoutePage)
+    var readFileCb = function(fileContent: string) {
+      that.busProvider.uploadBusRoute(fileContent);
+      console.log('uploadBusRoute callback: ' + fileContent);
+    }
+
+    //check https://github.com/apache/cordova-plugin-file for details
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
+      console.log('file system open: ' + fs.name);
+      fs.root.getFile("newPersistentFile.txt", { create: false }, function(fileEntry) {
+        console.log("fileEntry is file?" + fileEntry.isFile.toString());
         readFile(fileEntry, readFileCb);
       }, function(error) { });
     }, function(error) { });
