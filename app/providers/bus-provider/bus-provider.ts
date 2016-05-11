@@ -46,28 +46,32 @@ export class BusProvider {
     });
   }
 
-  setBusPositionToWeb(bPosition: BPosition) {
-    console.log('in setBusLocation ' + JSON.stringify(bPosition));
+  // A bus can periodically update its position with this REST api call.
+  // Or a bus can periodically update its position  with socket IO.
+  // Let's use REST Api for now.
+  updateBusPosition(bPosition: BPosition) {
+    console.log('BusProvider: updateBusPosition ' + JSON.stringify(bPosition));
     var postOptions: RequestOptionsArgs = {
       headers: new Headers({ 'Content-Type': 'application/json' })
     };
 
-    console.log('setBusPositionToWeb' + this.appSetting.webApiServer);
-   
-    this.http.post(this.appSetting.webApiServer + '/api/bus/location', JSON.stringify(bPosition), postOptions)
+    console.log('updateBusPosition' + this.appSetting.webApiServer);
+
+    this.http.post(this.appSetting.webApiServer + '/api/bus/position', JSON.stringify(bPosition), postOptions)
       .map(res => res.json())
       .catch(this.handleError)
       .subscribe(data => {
         // we've got back the raw data, now generate the core schedule data
         // and save the data for later reference
         this.data = data;
-        console.log('get data.json!!!!!!!' + JSON.stringify(data));
+        console.log('updateBusPosition http.post got back data: ' + JSON.stringify(data));
       },
       error => {
-        console.log('error in getting busLocation' + error);
+        console.log('error in updating bus position' + error);
       });
   }
 
+  //upload a bus route for one direction
   uploadBusRoute(bRoute: string) {
     console.log('in uploadBusRoute ' + bRoute);
     var postOptions: RequestOptionsArgs = {
@@ -75,12 +79,13 @@ export class BusProvider {
     };
 
     console.log('uploadBusRoute' + this.appSetting.webApiServer);
-    this.http.post(this.appSetting.webApiServer + '/api/bus/routes', bRoute, postOptions)
+    this.http.post(this.appSetting.webApiServer + '/api/bus/route', bRoute, postOptions)
       .map(res => res.json())
       .catch(this.handleError)
       .subscribe(data => {
         // we've got back the raw data, now generate the core schedule data
         // and save the data for later reference
+        // In fat arrow function, this refers to this in the defination context.
         this.data = data;
         console.log('uploadBusRoute: success callback!!!!!!!' + JSON.stringify(data));
       },

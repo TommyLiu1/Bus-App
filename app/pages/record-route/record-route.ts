@@ -3,6 +3,7 @@ import {BLineRoute, BStop, Coords} from '../../providers/bus-provider/bus';
 import {BusProvider} from '../../providers/bus-provider/bus-provider';
 import {Input} from 'angular2/core';
 import {logError, overWriteFile, readFile} from '../../util/logUtil';
+import {UpdatePositionPage} from '../update-position/update-position';
 
 declare var window: any;
 declare var LocalFileSystem: any;
@@ -63,10 +64,12 @@ export class RecordRoutePage {
   }
 
   addBusStop() {
+    var bStop: BStop = new BStop();
+    bStop.name = this.busStop.name;
     var addBusStopCb = function(position) {
-      this.busStop.coords.lat = position.coords.latitude;
-      this.busStop.coords.long = position.coords.longitude;
-      this.busLineRoute.addStop(this.busStop);
+      bStop.coords.lat = position.coords.latitude;
+      bStop.coords.long = position.coords.longitude;
+      this.busLineRoute.addStop(bStop);
     };
 
     console.log('busStop Name' + JSON.stringify(this.busStop.name));
@@ -137,6 +140,10 @@ export class RecordRoutePage {
         readFile(fileEntry, readFileCb);
       }, function(error) { });
     }, function(error) { });
+  }
+
+  gotoUpdatePositionPage() {
+    this.nav.push(UpdatePositionPage);
   }
 
 }
