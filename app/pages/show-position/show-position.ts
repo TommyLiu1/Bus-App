@@ -3,6 +3,7 @@ import * as io from 'socket.io-client';
 import {AppSetting} from '../../app-setting';
 import {BLinePosition} from '../../providers/bus-provider/bus';
 
+declare var cordova: any;
 /*
   Generated class for the ShowPositionPage page.
 
@@ -51,4 +52,23 @@ export class ShowPositionPage {
   unregisterPositionUpdate() {
     this.socket.emit('unregister positionUpdate', { city: 'ZH', line: 88 });
   }
+
+  registerPermission = function() {
+      cordova.plugins.notification.local.registerPermission(function(granted) {
+      console.log('granted' + granted);
+    });
+  };
+
+
+  scheduleNotification() {
+
+    //var sound = device.platform == 'Android' ? 'file://sound.mp3' : 'file://beep.caf';
+    var sound = 'file://beep.caf';
+    cordova.plugins.notification.local.schedule({
+      id: 1,
+      text: 'Test Message 1',
+      sound: sound,
+      data: { test: 5}
+    });
+  };
 }
