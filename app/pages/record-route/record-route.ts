@@ -4,6 +4,7 @@ import {BusProvider} from '../../providers/bus-provider/bus-provider';
 import {Input} from 'angular2/core';
 import {logError, overWriteFile, readFile} from '../../util/logUtil';
 import {UpdatePositionPage} from '../update-position/update-position';
+import {ShowPositionPage} from '../show-position/show-position';
 
 declare var window: any;
 declare var LocalFileSystem: any;
@@ -144,6 +145,10 @@ export class RecordRoutePage {
 
   gotoUpdatePositionPage() {
     this.nav.push(UpdatePositionPage);
+  }
+
+  gotoShowPositionPage() {
+    this.nav.push(ShowPositionPage);
   }
 
 }
