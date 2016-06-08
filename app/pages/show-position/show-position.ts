@@ -24,6 +24,7 @@ export class ShowPositionPage {
 
   //Connect to server with socketIO to receive position update from server
   connectServer() {
+    var self = this;
     // Socket IO has namespace and within each namespace there are rooms (channels). 
     // Users need to see real time bus locations. Users connect to passenger namespace via socket IO.
     // Drivers can either use REST Api to update bus position, or connect to driver namespace via socket IO.
@@ -41,6 +42,13 @@ export class ShowPositionPage {
       var t = new Date().getTime();
       console.log('time:' + t);
       console.log('got location from server for bus:' + JSON.stringify(data));
+      self.bLinePosition.city = data.city;
+      self.bLinePosition.line = data.line;
+      self.bLinePosition.plate = data.plate;
+      self.bLinePosition.position.coords.lat = data.position.coords.lat;
+      self.bLinePosition.position.coords.long = data.position.coords.long;
+      self.bLinePosition.position.heading = data.position.coords.heading;
+      self.bLinePosition.position.speed = data.position.coords.speed;
     });
   }
 

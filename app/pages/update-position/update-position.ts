@@ -28,12 +28,10 @@ export class UpdatePositionPage {
       bLinePosition.city = 'ZH';
       bLinePosition.line = 88;
       bLinePosition.plate = 'YC12345';
-      bLinePosition.position.coords.lat = 33.5845893;
-      bLinePosition.position.coords.long = -117.71982360000001;
-      // bLinePosition.position.coords.lat = position.coords.latitude;
-      // bLinePosition.position.coords.long = position.coords.longitude;
-      // bLinePosition.position.heading = position.coords.heading;
-      // bLinePosition.position.speed = position.coords.speed;
+      bLinePosition.position.coords.lat = position.coords.latitude;
+      bLinePosition.position.coords.long = position.coords.longitude;
+      bLinePosition.position.heading = position.coords.heading;
+      bLinePosition.position.speed = position.coords.speed;
 
       this.lat = position.coords.latitude;
       this.long = position.coords.longitude;
@@ -47,9 +45,7 @@ export class UpdatePositionPage {
     var t = new Date().getTime();
     console.log('updating position. Time=' + t);
 
-    update.bind(this)(null);
-
-    //navigator.geolocation.getCurrentPosition(update.bind(this), logError('updatePosition: '));
+    navigator.geolocation.getCurrentPosition(update.bind(this), logError('updatePosition: '));
 
   }
 
