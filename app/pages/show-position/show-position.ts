@@ -2,6 +2,9 @@ import {Page, NavController} from 'ionic-angular';
 import * as io from 'socket.io-client';
 import {AppSetting} from '../../app-setting';
 import {BLinePosition} from '../../providers/bus-provider/bus';
+import {gpsDist} from '../../util/mathUtil';
+import {UpdatePositionPage} from '../update-position/update-position';
+import {GpsTestPage} from '../gps-test/gps-test';
 
 declare var cordova: any;
 /*
@@ -62,13 +65,44 @@ export class ShowPositionPage {
 
   scheduleNotification() {
 
+    var now = new Date().getTime(),
+      _5_sec_from_now = new Date(now + 5 * 1000);
+
     //var sound = device.platform == 'Android' ? 'file://sound.mp3' : 'file://beep.caf';
-    var sound = 'file://beep.caf';
+    var sound = 'file://audio/beep.caf';
     cordova.plugins.notification.local.schedule({
       id: 1,
-      text: 'Test Message 1',
+      text: 'Test Message 1111i11',
       sound: sound,
+      at: _5_sec_from_now,
+      //icon and smallIcon only works on android.
+      icon: 'file://img/Hillary.png',
+      smallIcon: 'res://cordova',
       data: { test: 5}
     });
   };
+
+  gpsDistance() {
+    var p1 = { lat: 22.25297098451076, long: 113.5822988527495};
+    var q1 = { lat: 22.25291620476381, long: 113.5822147597685};
+    var q2 = { lat: 22.25314410871104, long: 113.5821985826954};
+
+
+    var t = gpsDist(p1, q1);
+    console.log('gpsDist p1 q1 =' + t);
+
+    var t1 = gpsDist(p1, q2);
+    console.log('gpsDist p1 q2 =' + t1);
+
+    var t2 = gpsDist(p1, p1);
+    console.log('gpsDist p1 p1 =' + t2);
+  }
+
+
+  gotoUpdatePositionPage() {
+    this.nav.push(UpdatePositionPage);
+  }
+  gotoGpsTestPage() {
+    this.nav.push(GpsTestPage);
+  }
 }

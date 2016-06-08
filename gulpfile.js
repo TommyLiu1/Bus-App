@@ -44,11 +44,17 @@ gulp.task('watch', ['clean'], function(done){
       gulpWatch('app/**/*.scss', function(){ gulp.start('sass'); });
       gulpWatch('app/**/*.html', function(){ gulp.start('html'); });
       gulpWatch('app/**/*.json', function(){ gulp.start('json'); });
-      buildBrowserify({ watch: true }).on('end', done);
+      buildBrowserify({ watch: true}).on('end', done);
     }
   );
 });
 
+// By default, buildBrowserify use typescript.js to compile .ts files.
+// This gives an error when adding a method to Number in mathUtil.ts
+// Instead, use tsc.js to compile .ts files.
+// Both typescript.js and tsc.js are in typescript module in tsify module 
+// in ionic-gulp-browserify-typescript module
+//       tsifyOptions: { typescript: "tsc"} 
 gulp.task('build', ['clean'], function(done){
   runSequence(
     ['sass', 'html', 'fonts', 'scripts'],
