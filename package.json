@@ -42,7 +42,10 @@
       "version": "",
       "locator": "ios"
     },
-    "android"
+    {
+      "platform": "android",
+      "locator": "browser"
+    }
   ],
   "name": "bus2",
   "description": "Bus2: An Ionic project"

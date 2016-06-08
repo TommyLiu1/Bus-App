@@ -29,6 +29,7 @@ export class ShowPositionPage {
     this.socket = io.connect(this.appSetting.webApiServer + '/passenger', {transports: ['websocket', 'polling']});
 
     console.debug('socket transport' + this.socket.io.engine.transport.name);
+    console.log('socket transport' + this.socket.io.engine.transport.name);
     console.dir(this.socket);
     console.log('connecting to webApiServer with socket IO' + this.socket);
 
@@ -40,11 +41,13 @@ export class ShowPositionPage {
   }
 
   disconnectServer() {
+    console.log('socket.io disconnecting');
     this.socket.disconnect();
   }
 
   // TODO Need to take the city, line parameter from user input
   registerPositionUpdate() {
+    console.log('register positionUpdate {city: ZH, line: 88}');
     this.socket.emit('register positionUpdate', {city: 'ZH', line: 88});
   }
 
