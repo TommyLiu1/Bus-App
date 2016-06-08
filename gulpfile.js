@@ -34,7 +34,6 @@ var copyHTML = require('ionic-gulp-html-copy');
 var copyFonts = require('ionic-gulp-fonts-copy');
 var copyScripts = require('ionic-gulp-scripts-copy');
 
-
 var isRelease = argv.indexOf('--release') > -1;
 
 gulp.task('watch', ['clean'], function(done){
@@ -71,7 +70,7 @@ gulp.task('build', ['clean'], function(done){
 gulp.task('sass', buildSass);
 gulp.task('html', copyHTML);
 gulp.task('fonts', copyFonts);
-gulp.task('scripts', copyScripts);
+gulp.task('scripts', ['map'], copyScripts);
 gulp.task('clean', function(){
   return del('www/build');
 });
@@ -82,6 +81,12 @@ gulp.task('json', function() {
     .pipe(gulp.dest('www/build'));
 })
 
+// cju added task to copy map files
+gulp.task('map', function() {
+  gulp.src('node_modules/es6-shim/es6-shim.map')
+    .pipe(gulp.dest('www/build/js'));
+})
+
 // cju added preprocess tasks
 // run 'gulp dev' before 'ionic run' to set the dev environment
 var preprocess = require('gulp-preprocess');
@@ -90,6 +95,12 @@ gulp.task('dev', function() {
     .pipe(preprocess({context: { APP_ENV: 'DEVELOPMENT', DEBUG: true}}))
     .pipe(gulp.dest('app/'));
 });
+
+gulp.task('test_iis', function() {
+  gulp.src('app/templates/app-setting.ts')
+    .pipe(preprocess({context: { APP_ENV: 'TEST_IIS', DEBUG: true}}))
+    .pipe(gulp.dest('app/'));
+})
 
 gulp.task('test_env', function() {
   gulp.src('app/templates/app-setting.ts')
