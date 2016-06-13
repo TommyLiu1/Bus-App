@@ -2,6 +2,7 @@ import {Page, NavController} from 'ionic-angular';
 import {BusProvider} from '../../providers/bus-provider/bus-provider';
 import {BLinePosition} from '../../providers/bus-provider/bus';
 import {logError} from '../../util/logUtil';
+import {GpsTestPage} from '../gps-test/gps-test';
 
 /*
   Generated class for the UpdatePositionPage page.
@@ -13,6 +14,10 @@ import {logError} from '../../util/logUtil';
   templateUrl: 'build/pages/update-position/update-position.html',
 })
 export class UpdatePositionPage {
+
+  lat: number;
+  long: number;
+  accuracy: number;
   constructor(public nav: NavController, private busProvider: BusProvider) {}
 
   updatePosition() {
@@ -28,6 +33,10 @@ export class UpdatePositionPage {
       bLinePosition.position.heading = position.coords.heading;
       bLinePosition.position.speed = position.coords.speed;
 
+      this.lat = position.coords.latitude;
+      this.long = position.coords.longitude;
+      this.accuracy = position.coords.accuracy;
+
       console.log('UpdatePositionPage:updatePosition bLinePosition =' + JSON.stringify(bLinePosition));
       var t = new Date().getTime();
       console.log('xxxxx time:' + t);
@@ -35,7 +44,12 @@ export class UpdatePositionPage {
     };
     var t = new Date().getTime();
     console.log('updating position. Time=' + t);
+
     navigator.geolocation.getCurrentPosition(update.bind(this), logError('updatePosition: '));
+
   }
 
+  gotoGpsTestPage() {
+    this.nav.push(GpsTestPage);
+  }
 }

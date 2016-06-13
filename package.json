@@ -36,13 +36,11 @@
     }
   ],
   "cordovaPlatforms": [
-    "ios",
     {
-      "platform": "ios",
-      "version": "",
-      "locator": "ios"
+      "platform": "android",
+      "locator": "browser"
     },
-    "android"
+    "ios"
   ],
   "name": "bus2",
   "description": "Bus2: An Ionic project"

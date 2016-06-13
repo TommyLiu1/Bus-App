@@ -25,4 +25,46 @@
    disconnect from Server 
   </button>
 
+  <button (click)="registerPermission()">
+   register for notification
+  </button>
+
+  <button (click)="scheduleNotification()">
+   schedule notification
+  </button>
+
+  <button (click)="gpsDistance()">
+   distance
+  </button>
+
+  <button (click)="gotoUpdatePositionPage()">
+  UpdatePosition Page
+</button>
+
+  <button (click)="gotoUpdatePositionPage()">
+  UpdatePosition Page
+</button>
+
+<button (click)="gotoGpsTestPage()">
+  GPS Test Page
+</button>
+
+<ion-list>
+    <ion-item>
+      <ion-label floating>lat </ion-label>
+      <ion-input type="text" [(ngModel)]="bLinePosition.position.coords.lat"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>long </ion-label>
+      <ion-input type="text" [(ngModel)]="bLinePosition.position.coords.long"></ion-input>
+    </ion-item>
+        <ion-item>
+      <ion-label floating>city </ion-label>
+      <ion-input type="text" [(ngModel)]="bLinePosition.city"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>line </ion-label>
+      <ion-input type="text" [(ngModel)]="bLinePosition.line"></ion-input>
+    </ion-item>
+ </ion-list>
 </ion-content>
