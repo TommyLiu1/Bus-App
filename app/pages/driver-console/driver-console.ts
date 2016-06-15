@@ -22,8 +22,8 @@ export class DriverConsolePage {
   }
 
   updatePosition() {
-  	this.startBtnDisabled=true;
-  	this.stopBtnDisabled=false;
+    this.startBtnDisabled=true;
+    this.stopBtnDisabled=false;
     var update = function(position) {
       this.bLinePosition.position.coords.lat = position.coords.latitude;
       this.bLinePosition.position.coords.long = position.coords.longitude;
@@ -38,7 +38,7 @@ export class DriverConsolePage {
    
    this.startInterval= setInterval(()=>
     {
-    	var t = new Date().getTime();
+      var t = new Date().getTime();
         console.log('updating position. Time=' + t);
         navigator.geolocation.getCurrentPosition(update.bind(this), logError('updatePosition: '));
     },5000);
@@ -47,10 +47,9 @@ export class DriverConsolePage {
 
   stopUpdatePosition()
   {
-  	console.log("stop the interval")
-  	clearInterval(this.startInterval);
-  	this.startBtnDisabled=false;
-  	this.stopBtnDisabled=true;
+    console.log("stop the interval")
+    clearInterval(this.startInterval);
+    this.startBtnDisabled=false;
+    this.stopBtnDisabled=true;
   }
-
 }
