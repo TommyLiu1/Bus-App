@@ -1,5 +1,5 @@
 import {Injectable} from 'angular2/core';
-import {Http, RequestOptionsArgs, Headers} from 'angular2/http';
+import {Http, RequestOptionsArgs, Headers,URLSearchParams} from 'angular2/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/Rx'; //import all the Observable operators, such as map
 import {BPosition} from './bus';
@@ -23,20 +23,27 @@ export class BusProvider {
     console.error('in handleError' + errMsg); // log to console instead
     return Observable.throw(errMsg);
   }
-  getBusPositionFromWeb() {
+  getBusPositionFromWeb(plate: string) {
     console.log('in getBusLocation');
+    let params: URLSearchParams = new URLSearchParams();
+    let getBusPositionUrl:string ='build/data/bus-location.json';
+    if(this.appSetting.IS_TEST_SERVER)
+    {
+      params.set('plate',plate);
+      getBusPositionUrl= this.appSetting.webApiServer + this.appSetting.UPDATE_POSIOTION_TEST_URL;
+    }
     return new Promise(resolve => {
       // We're using Angular Http provider to request the data,
       // then on the response it'll map the JSON data to a parsed JS object.
       // Next we process the data and resolve the promise with the new data.
-      this.http.get('build/data/bus-location.json')
+      this.http.get(getBusPositionUrl,{search:params})
         .map(res => res.json())
         .catch(this.handleError)
         .subscribe(data => {
           // we've got back the raw data, now generate the core schedule data
           // and save the data for later reference
           this.data = data;
-          console.log('get data.json!!!!!!!' + JSON.stringify(data));
+          // console.log('get data.json!!!!!!!' + JSON.stringify(data));
           resolve(this.data);
         },
 
@@ -51,13 +58,18 @@ export class BusProvider {
   // Let's use REST Api for now.
   updateBusPosition(bPosition: BPosition) {
     console.log('BusProvider: updateBusPosition ' + JSON.stringify(bPosition));
+    var updateBusPositionUrl: string = "";
     var postOptions: RequestOptionsArgs = {
       headers: new Headers({ 'Content-Type': 'application/json' })
     };
 
-    console.log('updateBusPosition' + this.appSetting.webApiServer);
+    if(this.appSetting.IS_TEST_SERVER)
+      updateBusPositionUrl = this.appSetting.webApiServer + this.appSetting.UPDATE_POSIOTION_TEST_URL;
+    else
+      updateBusPositionUrl = this.appSetting.webApiServer + this.appSetting.UPDATE_POSIOTION_URL;
 
-    this.http.post(this.appSetting.webApiServer + '/api/bus/position', JSON.stringify(bPosition), postOptions)
+    console.log('updateBusPosition' + updateBusPositionUrl);
+    this.http.post(updateBusPositionUrl, JSON.stringify(bPosition), postOptions)
       .map(res => res.json())
       .catch(this.handleError)
       .subscribe(data => {

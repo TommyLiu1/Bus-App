@@ -8,10 +8,14 @@ declare var window: any;
 
 @Injectable()
 export class AppSetting {
-  public webApiServer: string = '';
+  public webApiServer: string = 'http://localhost:3000';
+  public UPDATE_POSIOTION_URL:string = '/api/bus/position';
+  public UPDATE_POSIOTION_TEST_URL:string = '/api/bus/position_test';
+  public IS_TEST_SERVER:boolean = true;
   constructor() {
     console.log('App running in production environment.');
-    this.webApiServer = 'http://buscoming.azurewebsites.net';
+    //this.webApiServer = 'http://buscoming.azurewebsites.net';
+
     console.log('webApiServer = ' + this.webApiServer);
   }
 }

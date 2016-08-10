@@ -3,6 +3,7 @@ import {BusProvider} from '../../providers/bus-provider/bus-provider';
 import {BLinePosition} from '../../providers/bus-provider/bus';
 import {logError} from '../../util/logUtil';
 import Promise from "ts-promise";
+import {AppSetting} from '../../app-setting';
 /*
   Generated class for the DriverConsolePage page.
 
@@ -18,7 +19,7 @@ export class DriverConsolePage {
    public stopBtnDisabled:boolean=true;
    public startInterval:any;
 
-  constructor(public nav: NavController,public busProvider:BusProvider) {
+  constructor(public nav: NavController,public busProvider:BusProvider,public appSetting: AppSetting) {
   }
 
   updatePosition() {
@@ -35,12 +36,11 @@ export class DriverConsolePage {
       console.log('xxxxx time:' + t);
       this.busProvider.updateBusPosition(this.bLinePosition)
     };
-   
-   this.startInterval= setInterval(()=>
+    this.startInterval= setInterval(()=>
     {
       var t = new Date().getTime();
-        console.log('updating position. Time=' + t);
-        navigator.geolocation.getCurrentPosition(update.bind(this), logError('updatePosition: '));
+      console.log('updating position. Time=' + t);
+      navigator.geolocation.getCurrentPosition(update.bind(this), logError('updatePosition: '));
     },5000);
     
   }
@@ -51,5 +51,24 @@ export class DriverConsolePage {
     clearInterval(this.startInterval);
     this.startBtnDisabled=false;
     this.stopBtnDisabled=true;
+  }
+
+  updatePositionForTesting()
+  {
+    this.startBtnDisabled=true;
+    this.stopBtnDisabled=false;
+    var self = this;
+    this.busProvider.getBusPositionFromWeb(this.bLinePosition.plate).then(function(data){
+    for(var position in data)
+    {
+      console.log(data[position]);
+      self.startInterval=setInterval(()=>
+      {
+        console.log("upload position data every 5 seconds:"+data[position]);
+        self.busProvider.updateBusPosition(data[position]);
+      },5000);
+    }
+    });
+   
   }
 }
